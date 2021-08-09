@@ -1,0 +1,8 @@
+.env
+alembic.ini
+db.sqlite
+.vscode
+__pycache__
+.pytest_cache
+migrations
+pylintrc

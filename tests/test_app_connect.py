@@ -1,12 +1,12 @@
-from app.dependency import get_db
-from . import app
-from fastapi.testclient import TestClient
+from fastapi import status
+import pytest
+from httpx import AsyncClient
 
-client = TestClient(app)
 
-def test_api_connect():
-    response = client.get('/api/question/')
-    assert response.status_code == 200
+@pytest.mark.asyncio
+async def test_api_connect(async_client: AsyncClient):
+    response = await async_client.get('/api/question/')
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {'ping': 'pong'}
     
 

@@ -11,40 +11,52 @@ it leverages fastapi's native async/await functionality, pydantic models for dat
      *For Unix and Mac computers:*
 
     ```
-    $ python3 -m venv venv
+    $ python3 -m venv env
     $ source venv/bin/activate
-    (venv) $ _
+    (env) $ _
     ```
 
     *For Windows computers:*
 
     ```
-    $ python -m venv venv
+    $ python -m venv env
     $ venv\bin\activate
-    (venv) $ _
+    (env) $ _
     ```
 
-2. Istall the Python dependencies into the virtual environment using [pip]:
+2. Istall the project dependencies into the virtual environment using [pip]:
 
     ```
-    (venv) $ pip install -r requirements.txt
+    (env) $ pip install -r requirements.txt
+    ```
+    
+3. Create database migrations and upgrade:
+
+    **Note: postgresql is a requirement for this project.**
+
+    ```
+    (env) $ alembic init migrations
+    (env) $ alembic revision --autogenerate -m "initial migration"
+    (env) $ alembic upgrade head
     ```
 
-3. Start the development web server:
+4. Start the development web server:
 
     ```
-    (venv) $ python manage.py
+    (env) $ python manage.py
+    ```
 
-
-5. To view the api endpoints, open `http://localhost:8000/docs` on your web browser to leverage openApi.
-   or you could use postman or thunder client for visual studio.
+5. To view the api endpoints, open `http://localhost:8000/docs` on your web browser to leverage
+    openApi.
+   Alternatively, you can use postman or thunder client(visual studio code extension).
 
 
 6. to run tests:
     ```
-    (venv) $ pytest
+    (env) $ pytest
+    ```
 
-    NOTE: you must have pytest installed in your virtual environment.
+    **NOTE: you must have pytest installed in your virtual environment.**
 
 
 Happy Learning!!!

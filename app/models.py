@@ -5,6 +5,7 @@ from .database import Base
 from datetime import datetime, timedelta
 from passlib.hash import pbkdf2_sha256
 from jose import jwt
+#from time import time
 from app import settings
 
 class User(Base):
@@ -22,7 +23,7 @@ class User(Base):
 
     @property
     def password(self):
-        return AttributeError('password property is not readable')
+        raise AttributeError('password property is not readable')
     
     @password.setter
     def password(self, unhashed_password):
@@ -31,7 +32,7 @@ class User(Base):
     def check_password(self, unhashed_password):
         return pbkdf2_sha256.verify(unhashed_password, self.password_hash)
     
-    def create_access_token(self, expires_in: Optional[timedelta] = timedelta(minutes=1)):
+    def create_access_token(self, expires_in: Optional[timedelta] = timedelta(minutes=60)):
         token = jwt.encode({'id': self.id,\
             'exp': datetime.utcnow() + expires_in}, settings.SECRET_KEY, settings.ALGORITHM)
         return token
@@ -42,6 +43,7 @@ class Question(Base):
     id = Column(Integer, primary_key=True, index=True)
     question = Column(Text)
     answer = Column(Text)
+    timestamp = Column(DateTime, default=datetime.utcnow)
     asker_id = Column(Integer, ForeignKey('users.id'))
     expert_id = Column(Integer, ForeignKey('users.id'))
     

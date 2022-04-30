@@ -1,28 +1,28 @@
 from app import create_app
-import asyncio
-from app.dependency import init_models
-import typer
-import os
+import logging
 import uvicorn
+from app.database import SessionLocal
+from app.dependency import init_db
 
 
 app = create_app()
 
-cli = typer.Typer()
 
-@cli.command()
-def db_init():
-    print('creating database....')
-    asyncio.run(init_models())
-    print('databse created')
+
+@app.on_event('startup')
+async def on_startup():
+    try:
+        print('Checking database connection...')
+        db = SessionLocal()
+        # Try to create session to check if DB is awake
+        await db.execute('SELECT 1')
+        print('Done.')
+    except Exception as e:
+        print('Database conncetion failed. ', e)
+    finally:
+        await db.close()
 
 
 if __name__ == '__main__':
-    try:
-        if not os.path.exists('db.sqlite'):
-            cli()
-    except Exception:
-        print('databse creation failed!')
-    finally:
-        uvicorn.run('manage:app', debug=True, reload=True, workers=1)
+    uvicorn.run('manage:app', debug=True, reload=True, workers=1)
     

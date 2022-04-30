@@ -1,14 +1,11 @@
 from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import List
 from . import auth
 from ..models import User
 from . import schema
 from ..dependency import get_db
-
 
 
 
@@ -19,14 +16,14 @@ async def register(user: schema.UserCreate, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='username already exists, please pick another username')  
     try:
         new_user = User(user_name=user.user_name, password=user.password)
-        if new_user.user_name == 'oluwashizzy':
+        if new_user.user_name == 'admin':
             new_user.admin = True
         db.add(new_user)
         await db.commit()
     except Exception:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,\
-            detail='somthing went wrong on the server, please try again!')
+            detail='Something went wrong on the server, please try again!')
     return new_user
 
 

@@ -5,7 +5,7 @@ from app import settings
 from . import schema
 
 
-oauth2 = OAuth2PasswordBearer(tokenUrl='api/auth/login')
+oauth2 = OAuth2PasswordBearer(tokenUrl='/api/auth/login')
 
 
 async def get_current_user(token: str = Depends(oauth2)):
@@ -21,5 +21,5 @@ async def get_current_user(token: str = Depends(oauth2)):
             raise credential_exception
         token_data = schema.TokenData(id=id)
         return token_data
-    except JWTError as e:
-        raise credential_exception
+    except JWTError:
+        raise credential_exception.detail

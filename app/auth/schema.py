@@ -1,16 +1,16 @@
 from pydantic import BaseModel, EmailStr
 
 class UserBase(BaseModel):
-    user_name:str
+    user_name: str
     
     
 class UserCreate(UserBase):
-    password:str
+    password: str
 
 class UserSchema(UserBase):
-    id:int
-    expert:bool
-    admin:bool
+    id: int
+    expert: bool
+    admin: bool
     
     class Config:
         orm_mode = True
@@ -25,4 +25,4 @@ class TokenSchema(BaseModel):
     
 
 class TokenData(BaseModel):
-    id:int
+    id: int
